@@ -1,0 +1,56 @@
+﻿<Window x:Class="WpfSimpleNavigationSample.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfSimpleNavigationSample"
+        mc:Ignorable="d"
+        Title="MainWindow"
+        Height="450"
+        Width="800"
+        x:ClassModifier="internal"
+        d:DataContext="{d:DesignInstance local:MainWindowViewModel}">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type local:HomeViewModel}">
+            <local:HomeView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type local:ChildViewModel1}">
+            <local:ChildView1 />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type local:ChildViewModel2}">
+            <local:ChildView2 />
+        </DataTemplate>
+
+        <BooleanToVisibilityConverter x:Key="VisibilityConverter" />
+    </Window.Resources>
+
+    <Grid Margin="20, 10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <!-- Navigation Controls -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <Button Command="{Binding GoToChild1Command, Mode=OneTime}">
+                Show Child View 1
+            </Button>
+
+            <Button Margin="10,0,0,0" Command="{Binding GoToChild2Command, Mode=OneTime}">
+                Show Child View 2
+            </Button>
+
+            <Button
+                Margin="10, 0 ,0 ,0"
+                Command="{Binding GoBackCommand, Mode=OneTime}"
+                Visibility="{Binding CanGoBack, Mode=OneWay, Converter={StaticResource VisibilityConverter}}">
+                Go Back
+            </Button>
+        </StackPanel>
+
+        <!-- Content -->
+        <ContentControl Grid.Row="1" Margin="0,10,0,0" Content="{Binding ChildVm, Mode=OneWay}" />
+    </Grid>
+</Window>
