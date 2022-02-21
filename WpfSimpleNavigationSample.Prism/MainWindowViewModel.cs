@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System.Windows.Input;
 
 namespace WpfSimpleNavigationSample;
 
@@ -14,31 +13,28 @@ internal sealed partial class MainWindowViewModel : ViewModelBase
     public MainWindowViewModel(NavigationService navigationService)
     {
         _navigationService = navigationService;
-
-        GoToChild1Command = new RelayCommand(() =>
-        {
-            navigationService.NavigateTo(RegionNames.Main, ViewNames.Child1);
-            CanGoBack = navigationService.CanGoBack;
-        });
-
-        GoToChild2Command = new RelayCommand(() =>
-        {
-            navigationService.NavigateTo(RegionNames.Main, ViewNames.Child2);
-            CanGoBack = navigationService.CanGoBack;
-        });
-
-        GoBackCommand = new RelayCommand(() =>
-        {
-            navigationService.TryNavigateBack();
-            CanGoBack = navigationService.CanGoBack;
-        });
     }
 
-    public ICommand GoToChild1Command { get; }
+    [ICommand]
+    private void GoToChild1()
+    {
+        _navigationService.NavigateTo(RegionNames.Main, ViewNames.Child1);
+        CanGoBack = _navigationService.CanGoBack;
+    }
 
-    public ICommand GoToChild2Command { get; }
+    [ICommand]
+    private void GoToChild2()
+    {
+        _navigationService.NavigateTo(RegionNames.Main, ViewNames.Child2);
+        CanGoBack = _navigationService.CanGoBack;
+    }
 
-    public ICommand GoBackCommand { get; }
+    [ICommand]
+    private void GoBack()
+    {
+        _navigationService.TryNavigateBack();
+        CanGoBack = _navigationService.CanGoBack;
+    }
 
     public void PerformInitialNavigation()
     {

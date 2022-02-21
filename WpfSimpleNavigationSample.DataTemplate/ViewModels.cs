@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.Generic;
-using System.Windows.Input;
 
 namespace WpfSimpleNavigationSample;
 
@@ -40,35 +39,30 @@ internal sealed partial class MainWindowViewModel : ViewModelBase
     public MainWindowViewModel()
     {
         _navigationStack.Push(ChildVm);
-
-        GoToChild1Command = new RelayCommand(() =>
-        {
-            ChildVm = new ChildViewModel1();
-            _navigationStack.Push(ChildVm);
-            UpdateCanGoBack();
-        });
-
-        GoToChild2Command = new RelayCommand(() =>
-        {
-            ChildVm = new ChildViewModel2();
-            _navigationStack.Push(ChildVm);
-            UpdateCanGoBack();
-        });
-
-        GoBackCommand = new RelayCommand(() =>
-        {
-            if (!CanGoBack) return;
-            _navigationStack.Pop();
-            ChildVm = _navigationStack.Peek();
-            UpdateCanGoBack();
-        });
     }
 
-    public ICommand GoToChild1Command { get; }
+    [ICommand]
+    private void GoToChild1()
+    {
+        _navigationStack.Push(ChildVm = new ChildViewModel1());
+        UpdateCanGoBack();
+    }
 
-    public ICommand GoToChild2Command { get; }
+    [ICommand]
+    private void GoToChild2()
+    {
+        _navigationStack.Push(ChildVm = new ChildViewModel1());
+        UpdateCanGoBack();
+    }
 
-    public ICommand GoBackCommand { get; }
+    [ICommand]
+    private void GoBack()
+    {
+        if (!CanGoBack) return;
+        _navigationStack.Pop();
+        ChildVm = _navigationStack.Peek();
+        UpdateCanGoBack();
+    }
 
     private void UpdateCanGoBack() => CanGoBack = _navigationStack.Count > 1;
 }
